@@ -1,8 +1,12 @@
 package Common;
 
+import java.awt.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.sql.Date;
 
 /**
  * The type Ticket.
@@ -10,13 +14,32 @@ import java.time.format.DateTimeFormatter;
 public class Ticket implements Serializable {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private ZonedDateTime creationDate; //time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) форматирование даты
+    private Timestamp creationDate; //time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) форматирование даты
     private Float price; //Поле может быть null, Значение поля должно быть больше 0
     private String comment; //Поле не может быть null
     private TicketType type; //Поле не может быть null
     private Person person; //Поле не может быть null
     private Long MapKey;
+    private java.awt.Color color;
     private String formatter= ("dd.MM.yyyy HH:mm:ss");
+
+    public java.awt.Color getColor() {
+        return color;
+    }
+
+    public void setColor(java.awt.Color color) {
+        this.color = color;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    private String user;
 
     /**
      * Gets coordinates.
@@ -59,7 +82,7 @@ public class Ticket implements Serializable {
      *
      * @param creationDate the creation date
      */
-    public void setCreationDate(ZonedDateTime creationDate) {
+    public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -105,17 +128,10 @@ public class Ticket implements Serializable {
      *
      * @return the creation date
      */
-    public ZonedDateTime getCreationDate() {
+    public Timestamp getCreationDate() {
         return creationDate;
     }
 
-    /**
-     * Sets creation date.
-     */
-    public void setCreationDate() {
-        ZonedDateTime time = ZonedDateTime.now();
-        this.creationDate = time;
-    }
 
     /**
      * Gets price.
@@ -237,8 +253,8 @@ public class Ticket implements Serializable {
         /**
          * Sets passport id.
          */
-        public void setPassportID() {
-            this.passportID = String.valueOf(this.hashCode());
+        public void setPassportID(Long id) {
+            this.passportID = String.valueOf(id);
         }
 
         /**
@@ -451,7 +467,7 @@ public class Ticket implements Serializable {
      * @return the string
      */
     public String getTicket(){
-        return ("Полная информация о билете №"+this.getMapKey()+"\nНазвание:"+this.getName()+"\nКоординаты Х и У:"+this.coordinates.getX()+" И "+this.coordinates.getY()+"\nВремя создания билета:"+this.getCreationDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))+"\nЦена:"+this.getPrice()+"\nКомментарий:"+this.getComment()+"\nТип билета:"+this.getType()+"\nИнформация о человеке:\n   Паспорт номер:"+this.person.getPassportID()+"\n   Цвет волос:"+this.person.getHairColor()+"\n   Национальность:"+this.person.getNationality()+"\n   Родной город:"+this.person.location.getName()+"\n   Координаты города Х и У:"+this.person.location.getX()+" и "+this.person.location.getY());
+        return ("Полная информация о билете №"+this.getMapKey()+"\nВладелец:"+this.getUser()+"\nНазвание:"+this.getName()+"\nКоординаты Х и У:"+this.coordinates.getX()+" И "+this.coordinates.getY()+"\nВремя создания билета:"+this.getCreationDate()+"\nЦена:"+this.getPrice()+"\nКомментарий:"+this.getComment()+"\nТип билета:"+this.getType()+"\nИнформация о человеке:\n   Паспорт номер:"+this.person.getPassportID()+"\n   Цвет волос:"+this.person.getHairColor()+"\n   Национальность:"+this.person.getNationality()+"\n   Родной город:"+this.person.location.getName()+"\n   Координаты города Х и У:"+this.person.location.getX()+" и "+this.person.location.getY());
     }
 
     /**
@@ -460,6 +476,6 @@ public class Ticket implements Serializable {
      * @return the string
      */
     public String getCsvTicket(){
-        return(this.getName()+","+this.getCoordinates().getX()+","+this.getCoordinates().getY()+","+this.getPrice()+","+this.getComment()+","+this.getType()+","+this.getPerson().getHairColor()+","+this.getPerson().getNationality()+","+this.getPerson().getLocation().getX()+","+this.getPerson().getLocation().getY()+","+this.getPerson().getLocation().getName());
+        return(this.getName()+",("+this.getCoordinates().getX()+";"+this.getCoordinates().getY()+"),"+this.getCreationDate()+","+this.getPrice()+","+this.getComment()+","+this.getType()+","+this.getPerson().getHairColor()+","+this.getPerson().getNationality()+",("+this.getPerson().getLocation().getX()+";"+this.getPerson().getLocation().getY()+"),"+this.getPerson().getLocation().getName())+","+this.getUser();
     }
 }

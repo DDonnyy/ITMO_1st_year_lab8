@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="schema2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.idea/dataSources/58557f67-69f1-4cfc-b571-5e558669c6d6/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.zip!/" />
+      <root url="jar://$PROJECT_DIR$/.idea/dataSources/58557f67-69f1-4cfc-b571-5e558669c6d6/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -2,10 +2,10 @@ package Common.Commands;
 
 import Common.Command;
 import Common.Invoker;
-import Utility.CreateServer;
-import Utility.Save;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.sql.SQLException;
 
 /**
  * The type Common.Commands.Exit.
@@ -14,14 +14,11 @@ public class Exit implements Command {
     /**
      * Instantiates a new Common.Commands.Exit.
      */
-    public Exit(){
-        Invoker.regist("exit",this);
-    }
+
+
     @Override
-    public void execute(String par1) throws IOException {
-        System.out.println("Клиент отключился,запускаю автосохранение.\nОжидаю подключение нового клиента.");
-        Save save =new Save();
-        save.execute(null);
+    public void execute(Object par1, Socket clientSocket, String user) throws IOException, SQLException {
+
     }
 
     @Override

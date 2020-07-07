@@ -1,8 +1,12 @@
 package Common;
 
+import java.awt.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.sql.Date;
 
 /**
  * The type Ticket.
@@ -10,13 +14,32 @@ import java.time.format.DateTimeFormatter;
 public class Ticket implements Serializable {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private ZonedDateTime creationDate; //time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) форматирование даты
+    private Timestamp creationDate; //time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) форматирование даты
     private Float price; //Поле может быть null, Значение поля должно быть больше 0
     private String comment; //Поле не может быть null
     private TicketType type; //Поле не может быть null
     private Person person; //Поле не может быть null
     private Long MapKey;
+    private java.awt.Color color;
     private String formatter= ("dd.MM.yyyy HH:mm:ss");
+
+    public java.awt.Color getColor() {
+        return color;
+    }
+
+    public void setColor(java.awt.Color color) {
+        this.color = color;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    private String user;
 
     /**
      * Gets coordinates.
@@ -59,7 +82,7 @@ public class Ticket implements Serializable {
      *
      * @param creationDate the creation date
      */
-    public void setCreationDate(ZonedDateTime creationDate) {
+    public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -105,17 +128,10 @@ public class Ticket implements Serializable {
      *
      * @return the creation date
      */
-    public ZonedDateTime getCreationDate() {
+    public Timestamp getCreationDate() {
         return creationDate;
     }
 
-    /**
-     * Sets creation date.
-     */
-    public void setCreationDate() {
-        ZonedDateTime time = ZonedDateTime.now();
-        this.creationDate = time;
-    }
 
     /**
      * Gets price.
@@ -176,8 +192,8 @@ public class Ticket implements Serializable {
      * The type Coordinates.
      */
     public class Coordinates implements Serializable {
-    private Long x; //Максимальное значение поля: 297, Поле не может быть null
-    private Integer y; //Поле не может быть null
+        private Long x; //Максимальное значение поля: 297, Поле не может быть null
+        private Integer y; //Поле не может быть null
 
         /**
          * Gets x.
@@ -220,10 +236,10 @@ public class Ticket implements Serializable {
      * The type Person.
      */
     public class Person implements Serializable,Comparable<Person> {
-    private String passportID; //Длина строки не должна быть больше 24, Значение этого поля должно быть уникальным, Поле не может быть null
-    private Color hairColor; //Поле не может быть null
-    private Country nationality; //Поле не может быть null
-    private Location location; //Поле не может быть null
+        private String passportID; //Длина строки не должна быть больше 24, Значение этого поля должно быть уникальным, Поле не может быть null
+        private Color hairColor; //Поле не может быть null
+        private Country nationality; //Поле не может быть null
+        private Location location; //Поле не может быть null
 
         /**
          * Gets passport id.
@@ -231,15 +247,15 @@ public class Ticket implements Serializable {
          * @return the passport id
          */
         public String getPassportID() {
-        return passportID;
-    }
+            return passportID;
+        }
 
         /**
          * Sets passport id.
          */
-        public void setPassportID() {
-        this.passportID = String.valueOf(this.hashCode());
-    }
+        public void setPassportID(Long id) {
+            this.passportID = String.valueOf(id);
+        }
 
         /**
          * Gets hair color.
@@ -247,8 +263,8 @@ public class Ticket implements Serializable {
          * @return the hair color
          */
         public Color getHairColor() {
-        return hairColor;
-    }
+            return hairColor;
+        }
 
         /**
          * Sets hair color.
@@ -256,8 +272,8 @@ public class Ticket implements Serializable {
          * @param hairColor the hair color
          */
         public void setHairColor(Color hairColor) {
-        this.hairColor = hairColor;
-    }
+            this.hairColor = hairColor;
+        }
 
         /**
          * Gets nationality.
@@ -265,8 +281,8 @@ public class Ticket implements Serializable {
          * @return the nationality
          */
         public Country getNationality() {
-        return nationality;
-    }
+            return nationality;
+        }
 
         /**
          * Sets nationality.
@@ -274,8 +290,8 @@ public class Ticket implements Serializable {
          * @param nationality the nationality
          */
         public void setNationality(Country nationality) {
-        this.nationality = nationality;
-    }
+            this.nationality = nationality;
+        }
 
         /**
          * Gets location.
@@ -283,8 +299,8 @@ public class Ticket implements Serializable {
          * @return the location
          */
         public Location getLocation() {
-        return location;
-    }
+            return location;
+        }
 
         /**
          * Sets location.
@@ -292,8 +308,8 @@ public class Ticket implements Serializable {
          * @param location the location
          */
         public void setLocation(Location location) {
-        this.location = location;
-    }
+            this.location = location;
+        }
 
         @Override
         public int compareTo(Person o) {
@@ -302,7 +318,7 @@ public class Ticket implements Serializable {
                 result = ((Integer) this.location.x).compareTo(((Integer) o.location.getX()));
             }
             if (result==0){
-               result=((Double)this.location.y).compareTo(((Double)o.location.getY()));
+                result=((Double)this.location.y).compareTo(((Double)o.location.getY()));
 
             }
             if (result==0){
@@ -316,9 +332,9 @@ public class Ticket implements Serializable {
      * The type Location.
      */
     public class Location implements Serializable{
-    private int x;
-    private Double y; //Поле не может быть null
-    private String name; //Поле не может быть null
+        private int x;
+        private Double y; //Поле не может быть null
+        private String name; //Поле не может быть null
 
         /**
          * Gets x.
@@ -326,8 +342,8 @@ public class Ticket implements Serializable {
          * @return the x
          */
         public int getX() {
-        return x;
-    }
+            return x;
+        }
 
         /**
          * Sets x.
@@ -335,8 +351,8 @@ public class Ticket implements Serializable {
          * @param x the x
          */
         public void setX(int x) {
-        this.x = x;
-    }
+            this.x = x;
+        }
 
         /**
          * Gets y.
@@ -344,8 +360,8 @@ public class Ticket implements Serializable {
          * @return the y
          */
         public Double getY() {
-        return y;
-    }
+            return y;
+        }
 
         /**
          * Sets y.
@@ -353,8 +369,8 @@ public class Ticket implements Serializable {
          * @param y the y
          */
         public void setY(Double y) {
-        this.y = y;
-    }
+            this.y = y;
+        }
 
         /**
          * Gets name.
@@ -362,8 +378,8 @@ public class Ticket implements Serializable {
          * @return the name
          */
         public String getName() {
-        return name;
-    }
+            return name;
+        }
 
         /**
          * Sets name.
@@ -371,9 +387,9 @@ public class Ticket implements Serializable {
          * @param name the name
          */
         public void setName(String name) {
-        this.name = name;
+            this.name = name;
+        }
     }
-}
 
     /**
      * The enum Ticket type.
@@ -395,7 +411,7 @@ public class Ticket implements Serializable {
          * Cheap ticket type.
          */
         CHEAP;
-}
+    }
 
     /**
      * The enum Color.
@@ -417,7 +433,7 @@ public class Ticket implements Serializable {
          * Blue color.
          */
         BLUE;
-}
+    }
 
     /**
      * The enum Country.
@@ -443,7 +459,7 @@ public class Ticket implements Serializable {
          * Japan country.
          */
         JAPAN;
-}
+    }
 
     /**
      * Get ticket string.
@@ -451,8 +467,8 @@ public class Ticket implements Serializable {
      * @return the string
      */
     public String getTicket(){
-    return ("Полная информация о билете №"+this.getMapKey()+"\nНазвание:"+this.getName()+"\nКоординаты Х и У:"+this.coordinates.getX()+" И "+this.coordinates.getY()+"\nВремя создания билета:"+this.getCreationDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))+"\nЦена:"+this.getPrice()+"\nКомментарий:"+this.getComment()+"\nТип билета:"+this.getType()+"\nИнформация о человеке:\n   Паспорт номер:"+this.person.getPassportID()+"\n   Цвет волос:"+this.person.getHairColor()+"\n   Национальность:"+this.person.getNationality()+"\n   Родной город:"+this.person.location.getName()+"\n   Координаты города Х и У:"+this.person.location.getX()+" и "+this.person.location.getY());
-}
+        return ("Полная информация о билете №"+this.getMapKey()+"\nВладелец:"+this.getUser()+"\nНазвание:"+this.getName()+"\nКоординаты Х и У:"+this.coordinates.getX()+" И "+this.coordinates.getY()+"\nВремя создания билета:"+this.getCreationDate()+"\nЦена:"+this.getPrice()+"\nКомментарий:"+this.getComment()+"\nТип билета:"+this.getType()+"\nИнформация о человеке:\n   Паспорт номер:"+this.person.getPassportID()+"\n   Цвет волос:"+this.person.getHairColor()+"\n   Национальность:"+this.person.getNationality()+"\n   Родной город:"+this.person.location.getName()+"\n   Координаты города Х и У:"+this.person.location.getX()+" и "+this.person.location.getY());
+    }
 
     /**
      * Get csv ticket string.
@@ -460,6 +476,6 @@ public class Ticket implements Serializable {
      * @return the string
      */
     public String getCsvTicket(){
-        return(this.getName()+","+this.getCoordinates().getX()+","+this.getCoordinates().getY()+","+this.getPrice()+","+this.getComment()+","+this.getType()+","+this.getPerson().getHairColor()+","+this.getPerson().getNationality()+","+this.getPerson().getLocation().getX()+","+this.getPerson().getLocation().getY()+","+this.getPerson().getLocation().getName());
-}
+        return(this.getName()+",("+this.getCoordinates().getX()+";"+this.getCoordinates().getY()+"),"+this.getCreationDate()+","+this.getPrice()+","+this.getComment()+","+this.getType()+","+this.getPerson().getHairColor()+","+this.getPerson().getNationality()+",("+this.getPerson().getLocation().getX()+";"+this.getPerson().getLocation().getY()+"),"+this.getPerson().getLocation().getName())+","+this.getUser();
+    }
 }

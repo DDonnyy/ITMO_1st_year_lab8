@@ -2,32 +2,29 @@ package Utility;
 
 import java.io.*;
 import java.net.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ClientSender {
-        public static void send(Object o) {
+  public static Boolean serverisconnected = false;
+        public static void send(Object o) throws SocketException {
         try {
-            Map<Integer,Object> map= new HashMap<Integer,Object>();
-            DatagramChannel datagramChannel = DatagramChannel.open();
-            datagramChannel.bind(null);
-            SocketAddress serverAddress = new InetSocketAddress(InetAddress.getLocalHost(),1489);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            map.put(ClientReceiver.clientport,o);
-            objectOutputStream.writeObject(map);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-            byte[] buff = byteArrayOutputStream.toByteArray();
-            byteArrayOutputStream.close();
-            datagramChannel.configureBlocking(false);
-            datagramChannel.send(ByteBuffer.wrap(buff),serverAddress);
-            datagramChannel.close();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(ReceiverAndCanvasChanger.sock.getOutputStream());
+            objectOutputStream.writeObject(o);
     } catch (IOException e) {
-            e.printStackTrace();
+
+            System.out.println("Произошла некоторая ошибка,необходимо переподключение.");
+            ClientSender.serverisconnected = false;
+            throw new SocketException();
         }
+    }
+    public static void tryToConnect() throws InterruptedException, IOException {
+            try {
+                Socket socket = new Socket("localhost", 3017);
+                serverisconnected = true;
+                ReceiverAndCanvasChanger.sock = socket ;
+            }
+            catch (IOException e){
+                throw  e;
+            }
     }
 }
 

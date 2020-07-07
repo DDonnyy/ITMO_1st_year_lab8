@@ -3,6 +3,11 @@ package Common;
 import Common.Ticket;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -19,7 +24,7 @@ public class CreateTicket implements Serializable {
     public Ticket create(Long key) {
             Ticket ticket = new Ticket();
             ticket.setMapKey(key);
-            ticket.setCreationDate();
+            ticket.setCreationDate(Timestamp.from(Instant.now()));
             Ticket.Coordinates coords = ticket.new Coordinates();
             Ticket.Person person = ticket.new Person();
             Ticket.Location location = ticket.new Location();
@@ -29,7 +34,6 @@ public class CreateTicket implements Serializable {
             this.setComment(ticket);
             this.setTicketType(ticket);
             this.setPrice(ticket);
-            person.setPassportID();
             this.setHairColor(person);
             this.setNationality(person);
             this.setCoordinateXForLocation(location);
@@ -38,6 +42,7 @@ public class CreateTicket implements Serializable {
             person.setLocation(location);
             ticket.setPerson(person);
             ticket.setCoordinates(coords);
+            ticket.setCreationDate(Timestamp.from(Instant.now()));
             return ticket;
     }
 
@@ -53,7 +58,7 @@ public class CreateTicket implements Serializable {
             System.out.println("Введите имя билета.");
             System.out.print("$ ");
             String name = scanner.nextLine();
-            if (name.equals("") || name.equals("null")) {
+            if (name.equals("") || name == null) {
                 System.out.println("Значение не может быть нулевым, попробуйте ещё раз.");
                 this.setNameForTicket(ticket);
             } else ticket.setName(name);

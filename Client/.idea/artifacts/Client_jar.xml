@@ -3,6 +3,19 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Client_jar</output-path>
     <root id="archive" name="Client.jar">
       <element id="module-output" name="Client" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/button180x40.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/CoordPanel.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/CoordPanelWrong.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/eng.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/lit.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/logreg.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/main.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/panel.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/panel2.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/panelwrong.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/port.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/pressedbutton180x40.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/images/rus.png" />
     </root>
   </artifact>
 </component>

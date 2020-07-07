@@ -3,39 +3,42 @@ import Common.Command;
 import Common.Invoker;
 import Common.Ticket;
 import Common.TicketCollection;
-import Utility.ByteToObject;
+import Utility.DBworking;
 import Utility.ServerReceiver;
 import Utility.ServerSender;
+import Utility.TicketsUpdating;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 public class RemoveAllByPerson implements Command {
      public RemoveAllByPerson(){
             Invoker.regist("remove_all_by_person",this);
          }
+
+
     @Override
-    public void execute(String par1) throws IOException {
+    public void execute(Object par1, Socket clientSocket, String user) throws IOException, SQLException {
         TicketCollection ticketCollection = new TicketCollection();
-        int collectionSize = ticketCollection.getSize();
-        if (collectionSize==0) {
-            if (ExecuteScript.inExecution) ServerSender.send("Коллекция пуста,сравнивать не с чем.",2);
-            else ServerSender.send("Коллекция пуста,сравнивать не с чем.",0);
-        }
-        else {
-            ServerSender.send("",4);
-            Ticket t = (Ticket) ByteToObject.Cast(ServerReceiver.receive());
-            TreeMap<Long, Ticket> tickets = new TreeMap<>();
-            ticketCollection
-                    .getTickets()
-                   .entrySet()
-                    .stream()
-                    .filter((s)->(s.getValue().getPerson().compareTo(t.getPerson()))!=0)
-                    .forEach((s)-> tickets.put(s.getKey(),s.getValue()));
-            ticketCollection.setTickets(tickets);
-            if (tickets.size()==0) ServerSender.send("Билетов c указанным человеком не было найдено.",0);
-            else ServerSender.send("Билеты с указанным человеком были удалены.",0);
-        }
+        DBworking dBworking = new DBworking();
+        dBworking.ConnectionToDB();
+        dBworking.loadAllTickets();
+        Ticket ticket = (Ticket)par1;
+        TreeMap<Long,Ticket> ticketsnottodelete = new TreeMap<Long, Ticket>();
+        TreeMap<Long,Ticket> ticketsToDelete = new TreeMap<Long, Ticket>();
+        ticketCollection.getTickets().entrySet().forEach(x-> {
+            if (!x.getValue().getUser().equals(user)||!x.getValue().getPerson().equals(ticket.getPerson())) ticketsnottodelete.put(x.getKey(),x.getValue());
+        });
+        ticketCollection.getTickets().entrySet().forEach(x-> {
+            if (x.getValue().getUser().equals(user)||x.getValue().getPerson().equals(ticket.getPerson())) ticketsToDelete.put(x.getKey(),x.getValue());
+        });
+        ticketCollection.setTickets(ticketsnottodelete);
+        TicketsUpdating.ticketToDelete(ticketsToDelete);
+        dBworking.uploadAllTickets();
     }
 
     @Override

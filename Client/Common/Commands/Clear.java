@@ -1,10 +1,16 @@
 package Common.Commands;
 
 import Common.Command;
-import Common.TicketCollection;
 import Common.Invoker;
+import Common.TicketCollection;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Common.Commands.Clear.
@@ -17,20 +23,14 @@ public class Clear implements Command {
         Invoker.regist("clear",this);
     }
 
-    TicketCollection ticketCollection = new TicketCollection();
+
     @Override
-    public void execute(String par1) throws IOException {
-        if (ticketCollection.getTickets().size()>0){
-            ticketCollection.getTickets().clear();
-            System.out.println("Коллекция очищена.");
-            ticketCollection.setDateOFCreation(null);
-        }
-        else System.out.println("Коллекция уже пуста.");
-        System.out.print("$ ");
+    public void execute(Object par1, Socket clientSocket, String user) throws IOException, SQLException {
+
     }
 
     @Override
     public String getInfo() {
-        return "---> Очистить коллекцию.";
+        return "---> Удаление элементов,принадлежащих вам";
     }
 }

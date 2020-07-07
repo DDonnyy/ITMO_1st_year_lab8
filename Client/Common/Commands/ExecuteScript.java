@@ -1,12 +1,19 @@
 package Common.Commands;
 
 import Common.Command;
+import Common.CreateTicket;
 import Common.FileRead;
 import Common.Invoker;
+import Utility.ClientSender;
+import Utility.FileHandler;
+import Utility.ReceiverAndCanvasChanger;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.file.AccessDeniedException;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -14,82 +21,82 @@ import java.util.TreeSet;
  * The type Execute script.
  */
 public class ExecuteScript implements Command {
+    String name = "execute_script";
+    public static String result = "";
+    public String getName() {
+        return name;
+    }
     /**
      * Instantiates a new Execute script.
      */
     public ExecuteScript(){
         Invoker.regist("execute_script",this);
     }
-    private static TreeSet<String> fileNames = new TreeSet<>();
-    private static int numberOfExecution=0;
-    /**
-     * The constant inExecution - shows if the script executed from file.
-     */
-    public static boolean inExecution = false;
 
 
-    /**
-     * Gets execute data.
-     *
-     * @return the execute data
-     */
-    public static String getExecuteData() {
-        return executeData;
-    }
-
-    private static String executeData = "";
     @Override
-    public void execute(String par1) throws IOException {
-        try {
-            fileNames.add(par1);
-            String data = FileRead.readFromFile("A:\\javaprojects\\src\\" + par1);
-            String[] stroka = data.split("\r\n");
-            for (int i=0;i<stroka.length;i++) {
-                int number = i;
-                inExecution = true;
-                String[] commandAndPar;
-                commandAndPar = stroka[i].split(" ");
-                if (commandAndPar[0].equals("execute_script")) {
-                    Iterator iterator = fileNames.iterator();
-                    boolean alreadyInList = false;
-                    while (iterator.hasNext()) {
-                        if (commandAndPar[1].equals(iterator.next())) alreadyInList = true;
-                    }
-                    if (alreadyInList) {
-                        System.out.println("\n!!!Попытка зациклить программу прервана,постарайтесь такого больше не допускать.\n");
-                    } else {
-                        fileNames.add(commandAndPar[1]);
-                        ++numberOfExecution;
-                        Invoker.execute(stroka[i]);
-                        --numberOfExecution;
-                    }
-                } else {
-                    if (commandAndPar[0].equals("insert_key") || commandAndPar[0].equals("update_key")) {
+    public void execute(Object par1, Socket clientSocket, String user) throws IOException, SQLException {
+//        try {
+//            String filename = new FileHandler().getFilename();
+//            CreateTicket creater = new CreateTicket();
+//            try {
+//                ClientSender sender = App.getSender();
+//
+//                String data = .read(filename);
+//                Commands command = new Commands();
+//                String res = "";
+//                //System.out.println("data " + data);
+//                if (data != null) {
+//                    String[] commands = data.split("\n|\r\n");
+//                    //System.out.println("command.lenght " + commands.length);
+//                    for (int i = 0; i < commands.length; i++) {
+//                        if (!(commands[i].equals("execute_script " + filename))) {
+//                            command.setCommand(commands[i]);
+//                            if (command.getCommand() != null) {
+//                                String tempCommandName = commands[i];
+//                                String received = "";
+//                                sender.sendCommand(command);
+//                                String whyFailed = "";
+//                                if (sender.isCommandWithObject())
+//                                    if (receiver.receive().equals("newHuman")) {
+//                                        String[] params = new String[11];
+//                                        for (int j = 0; j < 11; j++) {
+//                                            i++;
+//                                            params[j] = commands[i];
+//                                        }
+//                                        HumanBeing newHuman = creater.createFromFile(params);
+//                                        if (newHuman != null)
+//                                            sender.send(newHuman);
+//                                        else {
+//                                            whyFailed = creater.getWhyFailed();
+//                                            sender.send(new HumanBeing());
+//                                        }
+//                                    }
+//                                receiver.receiveCollection();
+//                                received = receiver.receive();
+//                                if (received != null) {
+//                                    res += "Выполнение команды \"" + tempCommandName + "\":\n" + received + whyFailed + "\n\n";
+//                                    ;
+//                                }
+//                            }
+//                            if (command.getMessage() != (null)) {
+//                                String[] sentence = command.getMessage().split(",");
+//                                res += "Командa \"" + commands[i] + "\": " + sentence[0] + ".\n\n";
+//                            }
+//                        } else res += "Командa \"" + commands[i] + "\": невыполнима.\n";
+//                    }
+//                }
+//                result = (res);
+//
+//            } catch (NullPointerException | ClassNotFoundException e) {
+//
+//            }
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
 
-                        for (int j = 0; (j < 11 && i < stroka.length - 1); j++) {
-                            ++i;
-                            executeData += stroka[i] + ",";
-                        }
-                        Invoker.execute(stroka[number]);
-                        executeData = "";
-                    } else Invoker.execute(stroka[i]);
-                }
-            }
-            if (numberOfExecution==0){ fileNames.clear();inExecution = false;}
-
-        } catch (AccessDeniedException ex) {
-            System.out.println("Нет доступа к файлу.");
-            System.out.print("$ ");
-        }
-        catch (NullPointerException ex){
-            System.out.println("Имя файла не указано или файл пустой.");
-            System.out.print("$ ");
-        }
-        catch (FileNotFoundException ex){
-            System.out.println("Файл не найден,попробуйте ещё раз.");
-            System.out.print("$ ");
-        }
     }
+
 
     @Override
     public String getInfo() {

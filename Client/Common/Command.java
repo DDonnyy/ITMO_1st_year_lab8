@@ -2,9 +2,11 @@ package Common;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.Socket;
+import java.sql.SQLException;
 
 /**
- * The interface Command.
+ * The interface Common.Command.
  */
 public interface Command extends Serializable {
     /**
@@ -13,7 +15,7 @@ public interface Command extends Serializable {
      * @param par1 the par 1
      * @throws IOException the io exception
      */
-    abstract public void execute(String par1) throws IOException;
+    abstract public void execute(Object par1, Socket clientSocket,String user) throws IOException, SQLException;
 
     /**
      * Gets info about any command

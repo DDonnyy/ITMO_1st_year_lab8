@@ -1,37 +1,51 @@
 package Utility;
 
 import Utility.CreateServer;
+import com.sun.corba.se.spi.ior.IORFactories;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.*;
 
 public class ServerReceiver {
-    public static byte[] receive() {
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    public static ArrayList<Socket> clientSockets;
+
+    public Object receive(Socket client) {
+        Receiver receiver = new Receiver(client);
+        Future future = executorService.submit(receiver);
         try {
-            DatagramChannel datagramChannel = CreateServer.datagramChannel;
-            ByteBuffer byteBuffer = ByteBuffer.allocate(10000);
-            byte[] bytes = null;
-            while(true) {
-                InetSocketAddress socketAddress = (InetSocketAddress) datagramChannel.receive(byteBuffer);
-                if (socketAddress!= null){
-                    byteBuffer.flip();
-                    int limit = byteBuffer.limit();
-                    bytes=new byte[limit];
-                    byteBuffer.get(bytes,0,limit);
-                    byteBuffer.clear();
-                    return bytes;
-                }
+            return future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+return null;
+    }
+
+    public class Receiver implements Callable {
+        Socket client = null;
+
+        public Receiver(Socket socket) {
+            this.client = socket;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            try {
+                ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
+                return objectInputStream.readObject();
+            } catch (ClassNotFoundException | IOException e) {
+                return null;
             }
 
-        } catch (IOException e) {
-
         }
-        return new byte[0];
     }
 }
 

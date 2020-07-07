@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TreeMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * The type Common.Ticket collection.
@@ -14,6 +15,11 @@ public class TicketCollection implements Serializable {
     private static TreeMap<Long, Ticket> tickets = new TreeMap<>();
     private static ZonedDateTime DateOFCreation;
 
+    public static ReentrantReadWriteLock getLock() {
+        return lock;
+    }
+
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     /**
      * Sets date of creation.
      *
@@ -35,8 +41,19 @@ public class TicketCollection implements Serializable {
     /**
      * Set tickets.
      *
-     * @param collection the collection
+     *  the collection
      */
+    public TreeMap<Long, Ticket> getUserTickets(String user){
+        TreeMap<Long, Ticket> ticketTreeMap = new TreeMap<>();
+        tickets.entrySet().stream().filter(x->x.getValue().getUser().equals(user)).forEach(x->ticketTreeMap.put(x.getKey(),x.getValue()));
+        return ticketTreeMap;
+    }
+    public void deleteUserTickets(String user){
+        TreeMap<Long, Ticket> ticketTreeMap = new TreeMap<>();
+        tickets.entrySet().stream().filter(x->!(x.getValue().getUser().equals(user))).forEach(x->ticketTreeMap.put(x.getKey(),x.getValue()));
+        tickets = ticketTreeMap;
+    }
+
     public void setTickets(TreeMap<Long, Ticket> collection){
         tickets = collection;
     }

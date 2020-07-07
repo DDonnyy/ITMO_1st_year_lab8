@@ -4,6 +4,8 @@ import Utility.CreateServer;
 import Utility.ServerSender;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -38,23 +40,21 @@ public class Invoker {
      * @param s the  getting string.
      * @throws IOException the io exception
      */
-    public static void execute(String s) throws IOException {
+    public static void execute(String s, Socket clientSocket, String user) throws IOException, SQLException {
         Map<Command,String> commandStringMap = new HashMap<>();
         String name[]=s.split(" ");
+        ServerSender serverSender = new ServerSender();
         Command command = commands.get(name[0]);
         if (s.equals("")){ System.out.print("$ "); }
-        else if (name[0].equals("exit")){
-
-        }
        else if (command == null || name.length>2){
-            ServerSender.send("Такой команды не существует,попробуйте другую. Для справки введите \"help\"",2);
+            serverSender.send(clientSocket,"Такой команды не существует,попробуйте другую. Для справки введите \"help\"",null,null);
        }
         else if (name.length == 1){
-            command.execute(null);
+            command.execute(null,clientSocket,user);
 
         }
         else if (name.length == 2){
-            command.execute(name[1]);
+            command.execute(name[1],clientSocket,user);
 
         }
 
